@@ -2,6 +2,10 @@ package com.room12302.redis;
 
 import redis.clients.jedis.Jedis;
 
+/**
+ * remote update 
+ * 
+ */
 public class Test01 {
 	public static void main(String[] args) {
 		// 连接
