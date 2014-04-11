@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sms">
+
+	<resultMap id="BaseResultMap" type="Sms">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="mobile_no" property="mobileNo" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="biz_type" property="bizType" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="VARCHAR" />
+		<result column="send_date" property="sendDate" jdbcType="TIMESTAMP" />
+		<result column="emp_code" property="empCode" jdbcType="VARCHAR" />
+		<result column="error_code" property="errorCode" jdbcType="VARCHAR" />
+		<result column="send_detail" property="sendDetail" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, mobile_no, content, biz_type, state, send_date, emp_code, error_code, send_detail
+	</sql>
+
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from t_sms
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="Sms">
+		insert into t_sms (mobile_no, content,
+		biz_type, state, send_date,
+		emp_code, error_code, send_detail)
+		values (#{mobileNo,jdbcType=VARCHAR},
+		#{content,jdbcType=VARCHAR},
+		#{bizType,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{sendDate,jdbcType=TIMESTAMP},
+		#{empCode,jdbcType=VARCHAR}, #{errorCode,jdbcType=VARCHAR}, #{sendDetail,jdbcType=VARCHAR})
+	</insert>
+
+	<insert id="batch_insert" useGeneratedKeys="true" parameterType="java.util.List">
+		insert into t_sms (
+			mobile_no, 
+			content,
+			biz_type, 
+			state, 
+			send_date,
+			emp_code, 
+			error_code, 
+			send_detail
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			( 
+			#{item.mobileNo,jdbcType=VARCHAR},
+			#{item.content,jdbcType=VARCHAR},
+			#{item.bizType,jdbcType=VARCHAR}, 
+			#{item.state,jdbcType=VARCHAR},
+			#{item.sendDate,jdbcType=TIMESTAMP},
+			#{item.empCode,jdbcType=VARCHAR},
+			#{item.errorCode,jdbcType=VARCHAR},
+			#{item.sendDetail,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<select id="get_by_emp_code" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from t_sms where emp_code=#{empCode}
+	</select>
+	
+	<select id="search" parameterType="Sms" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from t_sms where 1 = 1
+		<if test="id!=null">
+			and id = #{id}
+		</if>
+		<if test="mobileNo!=null">
+			and mobile_no=#{mobileNo}
+		</if>
+		<if test="content!=null">
+			and content=#{content}
+		</if>
+		<if test="bizType!=null">
+			and biz_type=#{bizType}
+		</if>
+		<if test="sendDate!=null">
+			and send_date=#{sendDate}
+		</if>
+		<if test="empCode!=null">
+			and emp_code=#{empCode}
+		</if>
+		<if test="errorCode!=null">
+			and error_code=#{errorCode}
+		</if>
+		<if test="state!=null">
+			and state=#{state}
+		</if>
+		<if test="sendDetail!=null">
+			and send_detail=#{sendDetail}
+		</if>
+	</select>
+
+	<update id="update" parameterType="Sms">
+		update t_sms
+		<set>
+			<if test="mobileNo != null">
+				mobile_no = #{mobileNo,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=VARCHAR},
+			</if>
+			<if test="bizType != null">
+				biz_type = #{bizType,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=VARCHAR},
+			</if>
+			<if test="sendDate != null">
+				send_date = #{sendDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="empCode != null">
+				emp_code = #{empCode,jdbcType=VARCHAR},
+			</if>
+			<if test="errorCode != null">
+				error_code = #{errorCode,jdbcType=VARCHAR},
+			</if>
+			<if test="sendDetail!=null">
+				send_detail=#{sendDetail},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="batch_update" parameterType="java.util.List">
+		
+	</update>
+
+</mapper>

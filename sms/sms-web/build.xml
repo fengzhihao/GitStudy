@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--         	 2012-4-1     一键远程发布应用     fengzhihao@oneplus.cn    	 		-->
+<!--         	 脚本运行前请谨慎配置build.properties配置文件，各参数意义如下			-->
+
+<!--		 	 web应用名称 ：app.name													-->
+<!--		 	 远程服务器地址：remote.host.name										-->
+<!--		  	 远程服务器用户名：remote.user.name										-->
+<!--		  	 远程服务器密码：remote.user.pwd										-->
+<!--		 	 远程服务器上应用所属的tomcat目录：remote.tomcat.home					-->
+<!--		  	 远程服务器上应用文件位置,默认使用tomcat/webapps：remote.app.home    	-->
+<!--			 本地war包位置：war.location											-->
+
+<project name="SMS" default="remote.deploy" basedir=".">
+	
+	<property file="build.properties" />  
+	
+	<target name="remote.app.delete" description="删除原工程">
+			<sshexec 
+				host="${remote.host.name}" 
+				username="${remote.user.name}" 
+				password="${remote.user.pwd}" 
+				command="rm -rf ${remote.app.home}/${app.name}*" 
+				trust="true" 
+			/>
+	</target>
+	
+	<target name="remote.app.copy"  description="将war包拷贝到服务器"
+		depends="remote.app.delete" >
+		<scp 
+			file="${war.location}/${app.name}.war" 
+			trust="true" 
+			username="${remote.user.name}" 
+			password="${remote.user.pwd}" 
+			todir="${remote.user.name}@${remote.host.name}:${remote.app.home}" 
+		/>
+	</target>
+
+	<target name="remote.tomcat.stop" description="终止远程tomcat服务">
+		<sshexec 
+			host="${remote.host.name}" 
+			username="${remote.user.name}" 
+			password="${remote.user.pwd}" 
+			command="${remote.tomcat.home}/bin/catalina.sh stop" 
+			trust="true" 
+		/>
+		<sleep seconds="${sleep.time}" />
+	</target>
+
+	<target name="remote.tomcat.start" description="启动远程tomcat服务">
+		<sshexec 
+			host="${remote.host.name}" 
+			username="${remote.user.name}" 
+			password="${remote.user.pwd}" 
+			command="${remote.tomcat.home}/bin/catalina.sh start" 
+			trust="true" 
+		/>
+		<sleep seconds="${sleep.time}" />
+	</target>
+
+	<target name="remote.deploy" description="文件上传并启动远程tomcat服务" 
+		depends="remote.tomcat.stop,remote.app.copy,remote.tomcat.start">
+	</target>
+</project>

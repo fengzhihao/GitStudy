@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "./struts-2.1.7.dtd">
+<struts>
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+	<constant name="struts.i18n.encoding" value="utf-8"></constant>
+    
+    <include file="struts/struts-common.xml"></include>
+	<include file="struts/struts-sms.xml"></include>
+</struts>

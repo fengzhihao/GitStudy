@@ -1,0 +1,14 @@
+
+.settings/
+sms-common/.settings/
+sms-common/target/
+sms-dao/.settings/
+sms-dao/target/
+sms-facade/.settings/
+sms-facade/target/
+sms-service/.settings/
+sms-service/target/
+sms-web/.settings/
+sms-web/target/
+.classpath
+.project
